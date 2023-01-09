@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Ignore Annoying Merchants
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/LittleBitwise/
 // @version      0.5
-// @description  Adds an option to hide products from merchants by clicking their name on the search result page. Todo: Ignores can only be undone by manually editing LocalStorage, or by disabling this script.
+// @description  Adds an option to hide products from merchants by clicking their name on the search result page. Todo: Ignores can only be undone by manually editing LocalStorage.
 // @author       LittleBitwise
 // @match        https://marketplace.secondlife.com/products/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=secondlife.com
@@ -14,21 +14,23 @@
 const LOCAL_STORAGE_KEY = 'ignoredMerchants';
 
 // Page main element selector
-function getItems() {
-	return document.querySelectorAll(
-		'.gallery-item'
+function selectedElements() {
+	let result = document.querySelectorAll(
+		'li.ipsStreamItem'
 	);
+
+	return result;
 }
 
 // Process each main element
-getItems().forEach((item) => {
+selectedElements().forEach((item) => {
+	item.
 	let merchantElement = item.querySelector('.item-description > p > span');
 	let merchant = merchantElement.textContent.substring(3); // "By Merchant" -> "Merchant"
 
 	let isIgnored = isIgnoredCheck(merchant);
 
 	if (isIgnored) {
-		console.log('Ignored', merchant);
 		item.remove();
 	} else {
 		merchantElement.style.color = '#b15c5c';
@@ -60,7 +62,7 @@ function addToIgnore(merchant, item) {
 	localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(storage));
 
 	// Delete all existing elements
-	getItems().forEach((item) => {
+	selectedElements().forEach((item) => {
 		let element = item.querySelector('.item-description > p > span');
 
 		let name = element.textContent.substring(3); // "By Merchant" -> "Merchant"

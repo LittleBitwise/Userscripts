@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name         Denounce ignored content (discovery)
-// @namespace    http://tampermonkey.net/
+// @name         Denounce ignored content (discover)
+// @namespace    https://github.com/LittleBitwise/
 // @version      1.0
 // @description  Removes "You've chosen to ignore content by ..." elements from discovery feeds.
 // @author       LittleBitwise
@@ -11,23 +11,22 @@
 
 'use strict';
 
-function getItems() {
-	return document.querySelectorAll(
+// Main element selector
+function selectedElements() {
+	let result = document.querySelectorAll(
 		'li.ipsStreamItem'
 	);
+
+	return result;
 }
 
-getItems().forEach((item) => {
-	let node = item.childNodes[1].childNodes[3];
-	let isIpsTypeBreak = node.classList.contains('ipsType_break');
+// Process each main element
+selectedElements().forEach((element) => {
+	let node = element.querySelector('.ipsComment_ignored');
 
-	if (!isIpsTypeBreak) {
-		return; // Continue to next iteration in forEach, does not break loop!
-	}
-
-	let isIgnored = node.childNodes[1].classList.contains('ipsComment_ignored');
+	let isIgnored = Boolean(node);
 
 	if (isIgnored) {
-		item.remove();
+		element.remove();
 	}
 })
