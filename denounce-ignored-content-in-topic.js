@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Denounce ignored content (thread)
-// @namespace    http://tampermonkey.net/
+// @name         Denounce ignored content (topic)
+// @namespace    https://github.com/LittleBitwise/
 // @version      1.0
-// @description  Removes "You've chosen to ignore content by ..." elements from threads.
+// @description  Removes "You've chosen to ignore content by ..." elements from topics.
 // @author       LittleBitwise
 // @match        https://community.secondlife.com/forums/topic/*/
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=secondlife.com
@@ -11,12 +11,16 @@
 
 'use strict';
 
-function getItems() {
-	return document.querySelectorAll(
+// Main element selector
+function selectedElements() {
+	let result = document.querySelectorAll(
 		'.ipsComment_ignored'
 	);
+
+	return result;
 }
 
-getItems().forEach((item) => {
-	item.remove();
+// Process each main element
+selectedElements().forEach((element) => {
+	element.remove();
 })

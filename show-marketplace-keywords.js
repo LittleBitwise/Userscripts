@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         SL Marketplace Keywords
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/LittleBitwise/
 // @version      1.0
 // @description  Displays product keywords in product description.
 // @author       LittleBitwise
@@ -11,32 +11,36 @@
 
 'use strict';
 
-function getProductDescription() {
-	return document.querySelector('#product-description');
-}
+(() => {
+	let keywords = getKeywords();
+	let keywordElement = createKeywordElement(keywords);
+
+	let productDescription = getProductDescription();
+	productDescription.prepend(keywordElement);
+})();
+
+
+// Utility functions
+
 
 function getKeywords() {
 	let keywords = document.head.querySelector('meta[name=keywords]')?.content ?? '';
-
-	//console.log('kw string', keywords);
 
 	return keywords.split(/, */);
 }
 
 function createKeywordElement(keywords) {
-	let p = document.createElement('p');
+	let strong = document.createElement('strong');
+	strong.innerHTML = keywords.filter(n => n).join(', ');
 
-	// Clean up CSV tags for display
-	p.innerHTML = `<strong>Keywords: ${keywords.filter(n => n).join(', ')}</strong>`;
+	let p = document.createElement('p');
+	p.appendChild(strong);
 
 	return p;
 }
 
-let keywords = getKeywords();
-let keywordElement = createKeywordElement(keywords);
+function getProductDescription() {
+	let result = document.querySelector('#product-description .tab-content');
 
-//console.log(keywords);
-//console.log(keywordElement);
-
-let productDescription = getProductDescription();
-productDescription.childNodes[3].prepend(keywordElement);
+	return result;
+}

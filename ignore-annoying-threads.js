@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Ignore Annoying Threads
-// @namespace    http://tampermonkey.net/
+// @namespace    https://github.com/LittleBitwise/
 // @version      0.5
 // @description  Adds an option to ignore threads by title, which should not be displayed in discovery feeds. Todo: Undo ignores without manually clearing LocalStorage.
 // @author       LittleBitwise
@@ -15,11 +15,31 @@ const LOCAL_STORAGE_KEY = 'ignoredTitles';
 const IGNORE_BUTTON_CLASS = 'ipsTag_prefix';
 const IGNORE_BUTTON_TEXT = 'Ignore';
 
-function getItems() {
-	return document.querySelectorAll(
+// Main element selector
+function selectedElements() {
+	let result = document.querySelectorAll(
 		'li.ipsStreamItem'
 	);
+
+	return result;
 }
+
+// Process each main element
+selectedElements().forEach((element) => {
+	let title = element.querySelector('.ipsStreamItem_header .ipsContained > a').textContent;
+
+	let isIgnored = isIgnoredCheck(title);
+
+	if (isIgnored) {
+		element.remove();
+	} else {
+		element.appendChild(createButton(title, element));
+	}
+})
+
+
+// Utility functions
+
 
 function isIgnoredCheck(title) {
 	let storage = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -27,10 +47,8 @@ function isIgnoredCheck(title) {
 	return storage?.includes(title) ?? false;
 }
 
-function addToIgnore(title, item) {
+function addToIgnore(title, element) {
 	let storage = localStorage.getItem(LOCAL_STORAGE_KEY);
-
-	//console.log('storage was', storage);
 
 	if (storage) {
 		storage = JSON.parse(storage);
@@ -39,15 +57,14 @@ function addToIgnore(title, item) {
 		storage = [title];
 	}
 
-	//console.log('storage now', storage);
-
 	localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(storage));
-	item.remove();
+	element.remove();
 }
 
-function createButton(title, item) {
+function createButton(title, element) {
 	let button = document.createElement('button');
-	button.addEventListener('click', () => addToIgnore(title, item));
+
+	button.addEventListener('click', () => addToIgnore(title, element));
 	button.classList.add(IGNORE_BUTTON_CLASS);
 	button.textContent = IGNORE_BUTTON_TEXT;
 	button.style.marginTop = '10px';
@@ -55,15 +72,4 @@ function createButton(title, item) {
 	return button;
 }
 
-getItems().forEach((item) => {
-	let title = item.childNodes[1].childNodes[1].childNodes[5].childNodes[1].childNodes[3].childNodes[1].childNodes[0].textContent;
 
-	let isIgnored = isIgnoredCheck(title);
-
-	if (isIgnored) {
-		console.log('Ignored', title);
-		item.remove();
-	} else {
-		item.appendChild(createButton(title, item));
-	}
-})
