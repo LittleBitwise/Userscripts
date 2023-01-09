@@ -25,6 +25,7 @@ function selectedElements() {
 // Process each main element
 selectedElements().forEach((element) => {
 	let merchantElement = element.querySelector('.item-description > p.small');
+
 	merchantElement.style.overflow = 'visible';
 	merchantElement = merchantElement.querySelector('span');
 
@@ -69,9 +70,9 @@ function addToIgnore(merchant, element) {
 
 	// Delete all existing elements
 	selectedElements().forEach((element) => {
-		let node = element.querySelector('.item-description > p > span');
+		let span = element.querySelector('.item-description > p > span');
 
-		let name = node.textContent;
+		let name = span.textContent;
 
 		if (name == merchant) {
 			element.remove();
