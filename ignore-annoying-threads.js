@@ -4,7 +4,7 @@
 // @version      0.5
 // @description  Adds an option to ignore threads by title, which should not be displayed in discovery feeds. Todo: Undo ignores without manually clearing LocalStorage.
 // @author       LittleBitwise
-// @match        https://community.secondlife.com/discover/*/
+// @match        https://community.secondlife.com/discover/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=secondlife.com
 // @grant        none
 // ==/UserScript==
@@ -44,7 +44,13 @@ selectedElements().forEach((element) => {
 function isIgnoredCheck(title) {
 	let storage = localStorage.getItem(LOCAL_STORAGE_KEY);
 
-	return storage?.includes(title) ?? false;
+	storage = JSON.parse(storage);
+
+	if (storage) {
+		return storage?.includes(title) ?? false;
+	}
+
+	return false;
 }
 
 function addToIgnore(title, element) {
@@ -71,5 +77,3 @@ function createButton(title, element) {
 
 	return button;
 }
-
-
