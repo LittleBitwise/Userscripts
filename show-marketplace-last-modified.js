@@ -13,22 +13,20 @@
 'use strict';
 
 (() => {
-	const url = getMainProductImageUrl();
+	const url_main = getMainProductImageUrl();
+	const url_thumbs = getOtherProductImageUrls();
 
-	GM_xmlhttpRequest({
-		method: 'GET',
-		url: url,
-		onload: function(response) {
-			const date = getLastModifiedDateString(response);
+	const oldestUrlDate = promiseOldestUrlDate([url_main, ...url_thumbs]);
 
-			if (!date) return;
+	oldestUrlDate.then(date => {
+		if (!date) return;
 
-			const fuzzy = getFuzzyDateFormat(date);
-			const lastModifiedElement = createLastModifiedElement(fuzzy);
-			const productDescription = getProductDescription();
-			productDescription.prepend(lastModifiedElement);
-		}
+		const fuzzy = getFuzzyDateFormat(date);
+		const lastModifiedElement = createLastModifiedElement(fuzzy);
+		const productDescription = getProductDescription();
+		productDescription.prepend(lastModifiedElement);
 	});
+
 })();
 
 
@@ -39,6 +37,40 @@ function getMainProductImageUrl() {
 	const url = document.querySelector('#main-product-image').href ?? '';
 
 	return url;
+}
+
+function getOtherProductImageUrls() {
+	const elements = document.querySelectorAll('#thumbnails a');
+	const urls = Array.from(elements).map(a => a.href);
+
+	return urls;
+}
+
+function promiseOldestUrlDate(urls) {
+	return new Promise(resolve => {
+		const dates = urls.map(url => promiseUrlDate(url));
+		Promise.all(dates).then(dateStrings => {
+			resolve(dateStrings.reduce(getOlderDate));
+		});
+	});
+}
+
+function getOlderDate(oldest, current) {
+	return new Date(current) < new Date(oldest) ? current : oldest;
+}
+
+function promiseUrlDate(url) {
+	return new Promise(resolve => {
+		GM_xmlhttpRequest({
+			method: 'GET',
+			url: url,
+			onload: function(response) {
+				const date = getLastModifiedDateString(response);
+
+				resolve(date);
+			}
+		});
+	})
 }
 
 function getLastModifiedDateString(response) {
