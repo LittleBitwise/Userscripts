@@ -14,20 +14,18 @@
 
 (() => {
 	// Create placeholder so content doesn't jump around as noticably
-	const lastModifiedElement = createLastModifiedElement('Date: checking...');
+	const lastModifiedElement = createLastModifiedElement("&nbsp;");
 	const productDescription = getProductDescription();
 	productDescription.prepend(lastModifiedElement);
 
 	const url_main = getMainProductImageUrl();
 	const url_thumbs = getOtherProductImageUrls();
 
-	const oldestUrlDate = promiseOldestUrlDate([url_main, ...url_thumbs]);
-
-	oldestUrlDate.then(date => {
-		if (!date) return;
-
-		const fuzzy = getFuzzyDateFormat(date);
-		lastModifiedElement.firstChild.innerHTML = `Date: ${fuzzy}`;
+	promiseOldestUrlDate([url_main, ...url_thumbs]).then(date => {
+		if (date) {
+			const fuzzy = getFuzzyDateFormat(date);
+			lastModifiedElement.firstChild.innerHTML = `Date: ${fuzzy}`;
+		}
 	});
 })();
 
