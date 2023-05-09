@@ -13,6 +13,11 @@
 'use strict';
 
 (() => {
+	// Create placeholder so content doesn't jump around as noticably
+	const lastModifiedElement = createLastModifiedElement('Date: checking...');
+	const productDescription = getProductDescription();
+	productDescription.prepend(lastModifiedElement);
+
 	const url_main = getMainProductImageUrl();
 	const url_thumbs = getOtherProductImageUrls();
 
@@ -22,11 +27,8 @@
 		if (!date) return;
 
 		const fuzzy = getFuzzyDateFormat(date);
-		const lastModifiedElement = createLastModifiedElement(fuzzy);
-		const productDescription = getProductDescription();
-		productDescription.prepend(lastModifiedElement);
+		lastModifiedElement.firstChild.innerHTML = `Date: ${fuzzy}`;
 	});
-
 })();
 
 
@@ -112,9 +114,9 @@ function getFuzzyDateFormat(dateString) {
 	return `today`;
 }
 
-function createLastModifiedElement(date) {
+function createLastModifiedElement(text) {
 	const strong = document.createElement('strong');
-	strong.innerHTML = 'Date: ' + date;
+	strong.innerHTML = text;
 
 	const p = document.createElement('p');
 	p.appendChild(strong);
