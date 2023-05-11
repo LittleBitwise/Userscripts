@@ -17,7 +17,7 @@
 (() => {
 	const container = new StrongParagraphElement();
 
-	getProductDescription().prepend(container.getRootElement());
+	getProductDescriptionElement().prepend(container.getRootElement());
 
 	const keywords = getProductKeywordsList();
 	const clean = keywords.filter(n => n).join(', ');

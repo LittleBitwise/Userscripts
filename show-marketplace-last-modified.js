@@ -20,7 +20,7 @@
 (() => {
 	const container = new StrongParagraphElement();
 
-	getProductDescription().prepend(container.getRootElement());
+	getProductDescriptionElement().prepend(container.getRootElement());
 
 	const url_main = getMainProductImageUrl();
 	const url_thumbs = getOtherProductImageUrls();
