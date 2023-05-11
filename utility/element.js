@@ -9,6 +9,29 @@
 
 class StrongParagraphElement
 {
+	constructor(innerHTML = '&nbsp;') {
+		this.strong = document.createElement('strong');
+		this.strong.innerHTML = innerHTML;
+
+		this.p = document.createElement('p');
+		this.p.appendChild(this.strong);
+	}
+
+	getRootElement() {
+		return this.p;
+	}
+
+	getContent() {
+		return this.strong.innerHTML;
+	}
+
+	setContent(innerHTML) {
+		this.strong.innerHTML = innerHTML;
+	}
+}
+
+class StrongParagraphElement
+{
 	constructor(innerHTML) {
 		this.strong = document.createElement('strong');
 		this.strong.innerHTML = innerHTML;
@@ -28,4 +51,14 @@ class StrongParagraphElement
 	setContent(innerHTML) {
 		this.strong.innerHTML = innerHTML;
 	}
+}
+
+function createKeywordElement(keywords) {
+	let strong = document.createElement('strong');
+	strong.innerHTML = keywords.filter(n => n).join(', ');
+
+	let p = document.createElement('p');
+	p.appendChild(strong);
+
+	return p;
 }

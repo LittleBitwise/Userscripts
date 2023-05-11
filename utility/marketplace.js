@@ -7,10 +7,19 @@
 // Purpose:
 // Functions for finding specific elements of pages on the SL Marketplace.
 
-function getProductDescription() {
+
+
+function getProductDescriptionElement() {
 	const result = document.querySelector('#product-description .tab-content');
 
 	return result;
+}
+
+function getProductKeywordsList() {
+	const result = document.head.querySelector('meta[name=keywords]');
+	const keywords = result?.content ?? '';
+
+	return keywords.split(/, */);
 }
 
 function getMainProductImageUrl() {
