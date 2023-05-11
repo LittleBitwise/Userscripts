@@ -18,7 +18,7 @@
 
 
 (() => {
-	const container = new StrongParagraphElement('&nbsp;');
+	const container = new StrongParagraphElement();
 
 	getProductDescription().prepend(container.getRootElement());
 

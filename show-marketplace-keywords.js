@@ -6,41 +6,21 @@
 // @author       LittleBitwise
 // @match        https://marketplace.secondlife.com/p/*/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=secondlife.com
+// @require      https://raw.githubusercontent.com/LittleBitwise/Userscripts/develop/modularity/utility/element.js
+// @require      https://raw.githubusercontent.com/LittleBitwise/Userscripts/develop/modularity/utility/marketplace.js
+// @require      https://raw.githubusercontent.com/LittleBitwise/Userscripts/develop/modularity/utility/date-time.js
 // @grant        none
 // ==/UserScript==
 
 'use strict';
 
 (() => {
-	let keywords = getKeywords();
-	let keywordElement = createKeywordElement(keywords);
+	const container = new StrongParagraphElement();
 
-	let productDescription = getProductDescription();
-	productDescription.prepend(keywordElement);
+	getProductDescription().prepend(container.getRootElement());
+
+	const keywords = getProductKeywordsList();
+	const clean = keywords.filter(n => n).join(', ');
+
+	container.setContent(`Keywords: ${clean}`);
 })();
-
-
-// Utility functions
-
-
-function getKeywords() {
-	let keywords = document.head.querySelector('meta[name=keywords]')?.content ?? '';
-
-	return keywords.split(/, */);
-}
-
-function createKeywordElement(keywords) {
-	let strong = document.createElement('strong');
-	strong.innerHTML = keywords.filter(n => n).join(', ');
-
-	let p = document.createElement('p');
-	p.appendChild(strong);
-
-	return p;
-}
-
-function getProductDescription() {
-	let result = document.querySelector('#product-description .tab-content');
-
-	return result;
-}
