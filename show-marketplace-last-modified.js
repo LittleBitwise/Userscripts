@@ -25,6 +25,7 @@
 		if (date) {
 			const fuzzy = getFuzzyDateFormat(date);
 			lastModifiedElement.firstChild.innerHTML = `Date: ${fuzzy}`;
+			lastModifiedElement.firstChild.title = date;
 		}
 	});
 })();
