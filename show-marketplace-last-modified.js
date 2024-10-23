@@ -35,14 +35,14 @@
 
 
 function getMainProductImageUrl() {
-	const url = document.querySelector('#main-product-image').href ?? '';
+	const url = document.querySelector('.main-image img').src ?? '';
 
 	return url;
 }
 
 function getOtherProductImageUrls() {
 	const elements = document.querySelectorAll('#thumbnails a');
-	const urls = Array.from(elements).map(a => a.href);
+	const urls = Array.from(elements).map(a => a.src);
 
 	return urls;
 }
@@ -124,7 +124,7 @@ function createLastModifiedElement(text) {
 }
 
 function getProductDescription() {
-	const result = document.querySelector('#product-description .tab-content');
+	const result = document.querySelector('#product-description');
 
 	return result;
 }
