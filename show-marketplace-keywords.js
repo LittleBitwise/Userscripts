@@ -40,7 +40,7 @@ function createKeywordElement(keywords) {
 }
 
 function getProductDescription() {
-	let result = document.querySelector('#product-description .tab-content');
+	const result = document.querySelector('#product-description');
 
 	return result;
 }
